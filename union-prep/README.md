@@ -51,6 +51,8 @@ splits errors into *missed* (said nothing, a human fills it in, cheap) and
 expensive). A system that misses more and is wrong less is the better system.
 One averaged accuracy figure cannot tell you which one you have.
 
+First live run ([EVALS.md](EVALS.md), 2026-09-19, `claude-sonnet-5`): wrong-rate 0.000, miss-rate 0.000 across 27 labelled fields, landmines and all.
+
 **2. Appetite has a hard half and a soft half and they need different machinery.**
 
 State, line, revenue band, capacity, class exclusions are facts. A rule
