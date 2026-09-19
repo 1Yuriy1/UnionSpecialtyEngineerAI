@@ -17,12 +17,12 @@ CARRIERS = {c.carrier_id: c for c in load_carriers(
 
 
 def make_risk(**kw) -> Risk:
-    base = dict(
-        named_insured={"value": "Test Co", "confidence": 1.0},
-        mailing_state={"value": "NY", "confidence": 1.0},
-        operations_description={"value": "office", "confidence": 1.0},
-        lines_requested=[LineOfBusiness.GENERAL_LIABILITY],
-    )
+    base = {
+        "named_insured": {"value": "Test Co", "confidence": 1.0},
+        "mailing_state": {"value": "NY", "confidence": 1.0},
+        "operations_description": {"value": "office", "confidence": 1.0},
+        "lines_requested": [LineOfBusiness.GENERAL_LIABILITY],
+    }
     base.update(kw)
     return Risk.model_validate(base)
 

@@ -40,11 +40,11 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from broker.appetite import hard_filter  # noqa: E402
-from broker.extract import extract_risk  # noqa: E402
-from broker.llm import Client  # noqa: E402
-from broker.models import Extracted, Risk  # noqa: E402
-from broker.pipeline import load_carriers  # noqa: E402
+from broker.appetite import hard_filter
+from broker.extract import extract_risk
+from broker.llm import Client
+from broker.models import Extracted, Risk
+from broker.pipeline import load_carriers
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = yaml.safe_load((ROOT / "evals" / "cases.yaml").read_text())
