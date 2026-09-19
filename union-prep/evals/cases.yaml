@@ -28,6 +28,25 @@ extraction:
       deductible_requested_usd: 50000
       prior_losses_usd_5yr: 0
 
+  # Deliberately messy. No revenue figure anywhere, two conflicting effective
+  # dates (US vs EU day/month ordering), a narrative that claims five
+  # loss-free years against an attached loss run showing $50k of paid claims.
+  # The correct extraction says null where the document is silent and takes
+  # the loss run over the broker's narrative.
+  - name: precision machine shop renewal (messy)
+    file: app_003_messy.txt
+    expect:
+      named_insured: "Talcott Precision Manufacturing LLC"
+      mailing_state: "OH"
+      naics_code: "332710"
+      annual_revenue_usd: null
+      employee_count: 26
+      years_in_business: 11
+      limit_requested_usd: 2000000
+      deductible_requested_usd: 25000
+      effective_date: 2026-11-01
+      prior_losses_usd_5yr: 50000
+
 # The hard filter is a unit test, not a metric. It must be 100% forever.
 # Two of these are the traps: a contractor that Keystone excludes by class,
 # and a $5M limit that Keystone cannot write at all.
