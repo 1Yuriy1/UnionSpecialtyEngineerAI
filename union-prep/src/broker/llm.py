@@ -23,6 +23,31 @@ T = TypeVar("T", bound=BaseModel)
 
 DEFAULT_MODEL = os.environ.get("BROKER_MODEL", "claude-sonnet-5")
 
+# The exact kwargs every call hands to Anthropic().messages.create, carrying
+# default values for the fields that vary per call (model, max_tokens,
+# system, messages). This constant is the regression-test surface:
+# tests/test_llm_surface.py asserts every key is accepted by the installed
+# SDK's messages.create signature, so SDK drift — the 0.x→1.x removal of
+# temperature= used to kill every call with a TypeError before the request
+# left the process — shows up as a red CI run instead of a dead demo.
+COMPLETE_KWARGS: dict[str, Any] = {
+    "model": DEFAULT_MODEL,
+    "max_tokens": 2000,
+    "system": "You are a careful assistant.",
+    "messages": [{"role": "user", "content": ""}],
+}
+
+
+def _create_kwargs(model: str, prompt: str, system: str, max_tokens: int) -> dict[str, Any]:
+    """Layer the per-call values over the shared COMPLETE_KWARGS surface."""
+    return {
+        **COMPLETE_KWARGS,
+        "model": model,
+        "max_tokens": max_tokens,
+        "system": system or COMPLETE_KWARGS["system"],
+        "messages": [{"role": "user", "content": prompt}],
+    }
+
 
 class LLMError(RuntimeError):
     pass
@@ -39,18 +64,18 @@ class Client:
         prompt: str,
         system: str = "",
         max_tokens: int = 2000,
-        temperature: float = 0.0,
     ) -> str:
         last_err: Exception | None = None
         for attempt in range(3):
             try:
                 started = time.time()
                 resp = self._client.messages.create(
-                    model=self.model,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    system=system or "You are a careful assistant.",
-                    messages=[{"role": "user", "content": prompt}],
+                    **_create_kwargs(
+                        model=self.model,
+                        prompt=prompt,
+                        system=system,
+                        max_tokens=max_tokens,
+                    )
                 )
                 text = "".join(b.text for b in resp.content if b.type == "text")
                 self.call_log.append(
