@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 import argparse
-from datetime import date
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .llm import Client
@@ -26,7 +26,7 @@ def main() -> int:
     broker = Broker(Client(), load_carriers(args.carriers))
     sub = Submission(
         submission_id=args.application.stem,
-        received_at=date.today(),
+        received_at=datetime.now(tz=UTC).date(),
         source_text=args.application.read_text(),
     )
 

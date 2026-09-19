@@ -36,7 +36,7 @@ def extract_risk(client: Client, document_text: str) -> Risk:
 def _ground(risk: Risk, document_text: str) -> Risk:
     """Floor the confidence of any field whose quote is not in the document."""
     haystack = _normalise(document_text)
-    for name, field in risk.__dict__.items():
+    for field in risk.__dict__.values():
         if not isinstance(field, Extracted):
             continue
         if field.value is None:

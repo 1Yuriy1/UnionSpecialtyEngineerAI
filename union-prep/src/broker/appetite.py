@@ -49,7 +49,7 @@ def hard_filter(risk: Risk, carrier: CarrierAppetite) -> list[str]:
         blocks.append(f"not licensed/appointed in {state}")
 
     if risk.lines_requested and not set(risk.lines_requested) & set(carrier.lines):
-        wanted = ", ".join(l.value for l in risk.lines_requested)
+        wanted = ", ".join(line.value for line in risk.lines_requested)
         blocks.append(f"does not write {wanted}")
 
     rev = risk.annual_revenue_usd.value if risk.annual_revenue_usd else None
