@@ -1,0 +1,74 @@
+# A toy appetite table. In reality this is assembled from carrier appetite
+# guides, submission history, and what the brokers remember getting declined.
+# Encoding it is the hard, valuable, unglamorous half of the product.
+carriers:
+  - carrier_id: HALLMARK_E&S
+    carrier_name: Hallmark Excess & Surplus
+    admitted: false
+    lines: [general_liability, excess]
+    states: ["*"]
+    min_revenue_usd: 500000
+    max_revenue_usd: 75000000
+    max_limit_usd: 5000000
+    excluded_naics_prefixes: ["2361"]   # residential building construction
+    excluded_keywords: ["residential framing", "roofing", "crane"]
+    preferred_keywords: ["commercial contractor", "light manufacturing"]
+    submission_channel: email
+    submission_email: submissions@example-hallmark.test
+    typical_turnaround_days: 4
+    notes: >
+      Bread and butter commercial GL. Likes contractors doing interior
+      fit-out and light manufacturing with clean five year loss history.
+      Will not look at anything touching residential framing or roofing at
+      any price. Slow on accounts over $50M revenue.
+
+  - carrier_id: MERIDIAN_SPEC
+    carrier_name: Meridian Specialty
+    admitted: false
+    lines: [professional_liability, cyber]
+    states: ["NY", "NJ", "CT", "PA", "MA"]
+    min_revenue_usd: 250000
+    max_revenue_usd: 40000000
+    max_limit_usd: 10000000
+    excluded_keywords: ["crypto", "adult", "cannabis"]
+    preferred_keywords: ["technology", "professional services", "healthcare IT"]
+    submission_channel: portal
+    typical_turnaround_days: 7
+    notes: >
+      Tech E&O and cyber for northeast accounts. Strong appetite for SaaS and
+      professional services. Underwriters care a lot about MFA, backups and
+      whether the insured handles PHI. Declines anything crypto adjacent.
+
+  - carrier_id: ATLAS_PROP
+    carrier_name: Atlas Property Underwriters
+    admitted: false
+    lines: [property, inland_marine]
+    states: ["*"]
+    min_revenue_usd: 1000000
+    max_limit_usd: 25000000
+    excluded_keywords: ["coastal wind", "wildfire zone"]
+    preferred_keywords: ["warehouse", "cold storage", "distribution"]
+    submission_channel: email
+    submission_email: newbusiness@example-atlas.test
+    typical_turnaround_days: 10
+    notes: >
+      Commercial property with a warehouse and distribution focus. Wants a
+      full schedule of values and sprinkler detail. Avoids named storm
+      exposure in tier 1 coastal counties.
+
+  - carrier_id: KEYSTONE_ADM
+    carrier_name: Keystone Mutual
+    admitted: true
+    lines: [general_liability, property]
+    states: ["NY", "NJ", "PA"]
+    max_revenue_usd: 10000000
+    max_limit_usd: 2000000
+    excluded_naics_prefixes: ["23"]      # all construction
+    excluded_keywords: ["contractor"]
+    preferred_keywords: ["retail", "restaurant", "office"]
+    submission_channel: api
+    typical_turnaround_days: 2
+    notes: >
+      Admitted main street carrier. Small retail, restaurants and offices in
+      the tri-state area. Fast turnaround, cheap, but no construction of any
+      kind and hard limits at $2M.

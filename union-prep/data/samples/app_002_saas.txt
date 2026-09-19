@@ -1,0 +1,31 @@
+From: mrivera@pinnacleagency.test
+To: submissions@unionspecialty.test
+Subject: Tech E&O / Cyber - Brightline Analytics Inc
+
+New business submission, first time buyer.
+
+Insured: Brightline Analytics, Inc.
+HQ: 1 Penn Plaza, New York NY 10119
+Founded 2021
+NAICS 541511
+Operations: B2B SaaS platform providing supply chain forecasting to mid
+market manufacturers. Data hosted on AWS us-east-1. No PHI, no payment card
+data stored. Approximately 140 enterprise customers.
+
+2025 revenue: $6,200,000
+Headcount: 48
+
+Controls: MFA enforced across all systems, daily encrypted backups with
+quarterly restore testing, SOC 2 Type II completed March 2026, no EDR on
+endpoints yet (planned Q4).
+
+Coverage sought: Tech E&O and Cyber, $5,000,000 limit, $50,000 retention.
+Effective date: 12/01/2026.
+
+Prior losses: none in 5 years. No prior cyber policy.
+
+Note: insured also runs a small crypto settlement pilot with two customers,
+roughly 3% of revenue. Flagging in case it matters.
+
+Marco Rivera
+Pinnacle Agency

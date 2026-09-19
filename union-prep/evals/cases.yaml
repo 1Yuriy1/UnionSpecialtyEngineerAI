@@ -1,0 +1,89 @@
+# Labelled cases. In production these come from real submissions that a broker
+# has corrected, which is why you instrument the human review queue on day one:
+# every correction a broker makes is a free eval case.
+
+extraction:
+  - name: commercial interior contractor
+    file: app_001_contractor.txt
+    expect:
+      named_insured: "Calloway Interiors LLC"
+      mailing_state: "NY"
+      naics_code: "238350"
+      annual_revenue_usd: 8400000
+      employee_count: 31
+      years_in_business: 13
+      limit_requested_usd: 2000000
+      deductible_requested_usd: 10000
+      prior_losses_usd_5yr: 159500
+
+  - name: saas tech e&o
+    file: app_002_saas.txt
+    expect:
+      named_insured: "Brightline Analytics, Inc."
+      mailing_state: "NY"
+      naics_code: "541511"
+      annual_revenue_usd: 6200000
+      employee_count: 48
+      limit_requested_usd: 5000000
+      deductible_requested_usd: 50000
+      prior_losses_usd_5yr: 0
+
+# The hard filter is a unit test, not a metric. It must be 100% forever.
+# Two of these are the traps: a contractor that Keystone excludes by class,
+# and a $5M limit that Keystone cannot write at all.
+appetite:
+  - name: ny interior contractor 8.4M revenue 2M limit
+    risk:
+      named_insured: {value: "Calloway Interiors LLC", confidence: 1.0}
+      mailing_state: {value: "NY", confidence: 1.0}
+      operations_description: {value: "commercial interior fit-out, office and retail build-outs", confidence: 1.0}
+      naics_code: {value: "238350", confidence: 1.0}
+      annual_revenue_usd: {value: 8400000, confidence: 1.0}
+      limit_requested_usd: {value: 2000000, confidence: 1.0}
+      lines_requested: [general_liability]
+      notable_hazards: ["subcontracted electrical", "sprinkler water damage"]
+    expect_blocked:
+      HALLMARK_E&S: false
+      MERIDIAN_SPEC: true    # does not write GL
+      ATLAS_PROP: true       # does not write GL
+      KEYSTONE_ADM: true     # NAICS 23 excluded
+
+  - name: saas 6.2M revenue 5M limit
+    risk:
+      named_insured: {value: "Brightline Analytics, Inc.", confidence: 1.0}
+      mailing_state: {value: "NY", confidence: 1.0}
+      operations_description: {value: "B2B SaaS supply chain forecasting, crypto settlement pilot", confidence: 1.0}
+      naics_code: {value: "541511", confidence: 1.0}
+      annual_revenue_usd: {value: 6200000, confidence: 1.0}
+      limit_requested_usd: {value: 5000000, confidence: 1.0}
+      lines_requested: [cyber, professional_liability]
+      notable_hazards: ["crypto settlement pilot", "no EDR"]
+    expect_blocked:
+      HALLMARK_E&S: true     # does not write cyber
+      MERIDIAN_SPEC: true    # crypto keyword excluded
+      ATLAS_PROP: true
+      KEYSTONE_ADM: true
+
+  - name: texas warehouse property
+    risk:
+      named_insured: {value: "Lone Star Cold Storage LP", confidence: 1.0}
+      mailing_state: {value: "TX", confidence: 1.0}
+      operations_description: {value: "refrigerated warehouse and distribution", confidence: 1.0}
+      annual_revenue_usd: {value: 14000000, confidence: 1.0}
+      limit_requested_usd: {value: 18000000, confidence: 1.0}
+      lines_requested: [property]
+      notable_hazards: []
+    expect_blocked:
+      HALLMARK_E&S: true
+      MERIDIAN_SPEC: true
+      ATLAS_PROP: false
+      KEYSTONE_ADM: true     # not licensed in TX
+
+drafts:
+  - name: contractor to hallmark
+    file: app_001_contractor.txt
+    carrier_id: "HALLMARK_E&S"
+    reasons:
+      - "commercial interior fit-out is squarely in their preferred class"
+      - "explicitly no residential work, which is their hard exclusion"
+      - "subs carry own $1M limits with AI status"
