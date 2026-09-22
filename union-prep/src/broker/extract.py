@@ -1,6 +1,6 @@
 """Step 1: an application arrives as an email, a PDF, or a mess. Get a Risk out.
 
-Design note for the interview: the model is asked to quote its source text for
+Design note: the model is asked to quote its source text for
 every field. That quote is checked against the document before the field is
 trusted. A confident hallucination that cannot be found in the source gets its
 confidence floored, which is cheap and catches the failure mode that matters
