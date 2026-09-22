@@ -2,8 +2,7 @@
 
 Nothing here sends mail. draft_submission returns an object; a human or a
 queue decides whether it goes out. Any agent with send authority needs an
-approval gate in front of it, and saying so in an interview is worth more
-than a working SMTP call.
+approval gate in front of it — the gate is the product, not a limitation.
 """
 
 from __future__ import annotations
